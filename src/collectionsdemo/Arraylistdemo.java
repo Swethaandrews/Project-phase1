@@ -1,0 +1,21 @@
+package collectionsdemo;
+
+import java.util.ArrayList;
+
+public class Arraylistdemo {
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		ArrayList<String> cities =new ArrayList<>();
+		cities.add("london");
+		cities.add("paris");
+		cities.add("new delhi");
+		cities.add("mumbai");
+		System.out.println(cities.size());
+		for(String t: cities)
+		{
+			System.out.println(t);
+		}
+		System.out.println(cities.get(1));
+	}
+
+}
