@@ -1,0 +1,24 @@
+package exceptionpractises;
+
+public class Finallydemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int i =12;
+		int j =0;
+		try {
+			System.out.println("result" + i/j);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+		System.out.println("result for addition " + i+j);
+		System.out.println("result for multiplication " + i*j);
+		System.out.println("result for substraction " + (i-j));
+		
+		}
+
+	}
+
+}

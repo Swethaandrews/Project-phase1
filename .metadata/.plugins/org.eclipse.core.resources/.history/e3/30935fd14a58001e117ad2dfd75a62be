@@ -1,0 +1,11 @@
+package collectionsdemo;
+
+import java.util.ArrayList;
+
+public class Arraylistdemo {
+
+	public static void main(String[] args) {
+		ArrayList cities =new ArrayList();
+	}
+}
+	

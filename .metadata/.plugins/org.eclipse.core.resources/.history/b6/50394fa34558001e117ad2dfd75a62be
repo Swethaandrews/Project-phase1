@@ -1,0 +1,17 @@
+package collectionsdemo;
+
+import java.util.Arraylist;
+
+public class Arraylistdemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		
+		
+		Arraylist cities = new Arraylist();
+		
+
+	}
+
+}

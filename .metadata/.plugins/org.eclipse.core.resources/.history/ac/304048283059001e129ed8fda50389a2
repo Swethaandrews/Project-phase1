@@ -1,0 +1,35 @@
+package javapro;
+
+public class Acessmodifiers2 {
+
+	private char[] hours;
+	private char[] mins;
+	private char[] name;
+	private char[] tool;
+	private char[] x;
+	private char[] z;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Acessmodifiers2 obj = new Acessmodifiers2();
+		
+		System.out.println(obj.hours);
+		System.out.println(	obj.mins);
+		
+		// Scenario : Public Modifier
+		// observe the symbol infront of varibale is green circle when you do obj.variable name
+		// Now go to Access3 class and you will be able to call the variables over there.
+		
+		System.out.println(obj.name);
+		System.out.println(obj.tool);
+		
+		
+		// Scenario : protected modifier
+		
+		System.out.println(obj.x);
+		System.out.println(obj.z);
+
+
+	}
+
+}

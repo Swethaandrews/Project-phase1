@@ -1,0 +1,20 @@
+package collectionDemo;
+
+public class HashSetDemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		HashSet<String>cities =new HashSet<>();
+		cities.add("london");
+		cities.add("paris");
+		cities.add("new delhi");
+		cities.add("mumbai");
+		for (String t:cities)
+		{
+			System.out.println(t);
+		}
+		
+
+	}
+
+}

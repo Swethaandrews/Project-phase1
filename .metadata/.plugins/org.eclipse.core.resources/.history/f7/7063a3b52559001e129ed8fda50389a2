@@ -1,0 +1,27 @@
+package exceptionpractises;
+
+public class Exceptiondemo {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		int i =12;
+		int j =0;
+		String name =null;
+		try {
+			System.out.println("result" + i/j);
+		}
+		catch(ArithmeticException e) {
+			System.out.println(e.getMessage());
+			System.out.println("please dint give value 0 as value of j");
+		}
+		System.out.println("result for addition " + i+j);
+		System.out.println("result for multiplication " + i*j);
+		System.out.println("result for substraction " + (i-j));
+		
+		
+		
+		
+
+	}
+
+}

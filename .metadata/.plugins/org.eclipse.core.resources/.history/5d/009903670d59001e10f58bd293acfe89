@@ -1,0 +1,26 @@
+package javapro;
+
+public class Acessmodifiers {
+	public class Access1 {
+		
+		int hours =3;
+		int mins = 47;
+		
+		// Scenario 2: Public Modifier
+		
+		public String name = "sonal";
+		public String tool = "Selenium";
+		
+		// Scenario 3: private Modifier
+		
+		private int a =3;
+		private int b = 47;
+		
+		// Scenario 4: protected Modifier
+
+		
+		protected int x = 100;
+		protected int z = 200;
+		}
+
+}
