@@ -1,0 +1,197 @@
+----------------------------------------------------------------------------------------
+parallel execution
+---------------------------------------------------------------------------------------
+package com.app.TestNGScripts;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import org.testng.annotations.Test;
+
+
+public class Paralleltest {
+
+	@Test
+	public void wikiPage() throws InterruptedException
+	{
+		 WebDriver driver = new ChromeDriver();
+		
+		driver.get("https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Wikipedia%3ASign+up");
+		
+		Thread.sleep(1000);
+		driver.close();
+	}
+	
+	@Test
+	public void wikiPage2() throws InterruptedException
+	{
+		WebDriver driver = new ChromeDriver();
+		
+		driver.get("https://en.wikipedia.org/w/index.php?title=Special:CreateAccount&returnto=Wikipedia%3ASign+up");
+		
+		Thread.sleep(1000);
+		driver.close();
+	}
+
+	@Test
+	public void ninjaPage() throws InterruptedException
+	{
+		 WebDriver driver = new ChromeDriver();
+		
+		driver.get("https://tutorialsninja.com/demo/");
+		
+		Thread.sleep(1000);
+		driver.close();
+	}
+	
+	@Test
+	public void ninjaPage2() throws InterruptedException
+	{
+		WebDriver driver = new ChromeDriver();
+		driver.get("https://tutorialsninja.com/demo/");
+		
+		Thread.sleep(1000);
+		driver.close();
+	}
+	
+
+
+}
+
+--------------------------------------------------------------------------------------------------
+xml file for parallel test
+-------------------------------------------------------------------------------------------------
+<!-- thread count = how many parallel sessions to run at a time -->
+
+<suite name="testsuite" verbose="1" parallel="methods" thread-count="2">
+
+<test name="TestCycle1">
+<classes>
+<class name="com.app.TestNGScripts.Paralleltest">
+  <methods>
+    <include name="wikiPage"></include> 
+    <include name="wikiPage2"></include>
+    <include name="ninjaPage"></include>
+    <include name="ninjaPage2"></include>
+  </methods>
+</class>
+</classes>
+</test>
+
+</suite>
+
+
+--------------------------------------------------------------------------------------------------------
+groups attribute of @Test
+---------------------------------------------------------------------------------------------------------
+package testscenario;
+import org.testng.annotations.Test;
+
+public class Sample1 {
+	@Test(priority='1',groups= {"smoke","functional","regression"})
+	public void openapp()
+	{
+		System.out.println("Open the browser and open URL");
+	}
+	
+	@Test(priority='2',groups= {"functional"})
+	public void loginSample1()
+	{
+		System.out.println("login successfully");
+	}
+	
+	@Test(priority='3',groups= {"regression"})
+	public void loginwithInvaliddata()
+	{
+		System.out.println("login failed");
+	}
+	
+	@Test(priority='4',groups= {"regression"})
+	public void loginwithWrongpassword()
+	{
+		System.out.println("Wrong password");
+	}
+
+}
+
+---------------------------------------------------------
+groups demo 2
+----------------------------------------------------------
+package testscenario;
+import org.testng.annotations.Test;
+
+public class Sample2 {
+	@Test(priority='1',groups= {"smoke","functional","regression"})
+	public void opentheAccountPage()
+	{
+		System.out.println("Open the browser and open Accountspage");
+	}
+	
+	@Test(priority='2',groups= {"functional"})
+	public void login()
+	{
+		System.out.println("login app");
+	}
+	@Test(priority='3',groups= {"functional"})
+	public void Accounts()
+	{
+		System.out.println("check the accountpage");
+	}
+	
+	@Test(priority='4',groups= {"functional","regression"})
+	public void createAccount()
+	{
+		System.out.println("create an account");
+	}
+	
+	@Test(priority='5',groups= {"smoke","regression","functional"})
+	
+	public void Logout()
+	{
+		System.out.println("Logout");
+	}
+
+}
+------------------------------------------------------------
+xml file for groups attribute of @Test
+-----------------------------------------------------------
+<suite name="LearningGroups">
+
+<test name="smokeTesting">
+<groups>
+   <run>
+   <include name="smoke"></include> 
+   </run>
+</groups>
+<classes>
+<class name="testscenario.Sample1"></class>
+<class name="testscenario.Sample2"></class>
+</classes>
+</test>
+
+<test name="RegressionTesting">
+<groups>
+   <run>
+   <include name="regression"></include> 
+   </run>
+</groups>
+<classes>
+<class name="testscenario.Sample1"></class>
+<class name="testscenario.Sample2"></class>
+</classes>
+</test>
+
+<test name="Alltesting">
+<groups>
+   <run>
+   <exclude name="smoke"></exclude>
+   </run>
+</groups>
+<classes>
+<class name="testscenario.Sample1"></class>
+<class name="testscenario.Sample2"></class>
+</classes>
+</test>
+</suite>
+	
+
