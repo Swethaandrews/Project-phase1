@@ -1,0 +1,39 @@
+--------------------------------------------------------------------
+xml file for @Test,BeforeAftermethod & BeforeAfterclass Annotations
+----------------------------------------------------------------------
+<suite name="Application" verbose="1">
+<test name="TestCycle1">
+<classes>
+<class name="com.app.TestNGScripts.TestAnnotation"></class>
+<class name="com.app.TestNGScripts.BeforeAfterMethodAnnotation"></class>
+<class name="com.app.TestNGScripts.BeforeAfterClassAnnotation"></class>
+</classes>
+</test>
+</suite>
+------------------------------------------------------------------
+demo 2
+------------------------------------------------------------------
+<suite name="Application2" verbose="1">
+
+<test name="TestCycle1">
+<classes>
+<class name="com.app.TestNGScripts.TestAnnotation">
+  <methods>
+    <include name="login"></include> 
+  </methods>
+</class>
+
+<class name="com.app.TestNGScripts.BeforeAfterMethodAnnotation">
+<methods>
+  <include name="logout"></include>
+</methods>
+</class>
+<class name="com.app.TestNGScripts.BeforeAfterClassAnnotation">
+ <methods>
+  <exclude name="login"></exclude>
+  <exclude name="logout"></exclude>
+</methods>
+</class>
+</classes>
+</test>
+</suite>
