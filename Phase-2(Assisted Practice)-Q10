@@ -1,0 +1,265 @@
+--------------------------------------------------------------------
+Test Base
+---------------------------------------------------------------------
+package com.ninja.qa.Base;
+
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Method;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+
+
+
+
+public class TestBase {
+
+
+	public static WebDriver driver;
+	public static ExtentReports extentreports;
+	public static ExtentTest extentTest;
+	
+	public static void openBrowser()
+	{
+	    driver = new ChromeDriver();
+		
+		driver.manage().window().maximize();
+		driver.get("https://tutorialsninja.com/demo/");	
+	}
+	
+	@BeforeTest
+	public void getnameMethod(ITestContext context)
+	{
+		extentTest=	extentreports.createTest(context.getName());
+	}
+	
+	@BeforeSuite  // this method will be excuted before suite begins its execution
+	public void InitalizeExtentReport()
+	{
+		ExtentSparkReporter sparkreporter = new ExtentSparkReporter("reportpom.html");
+		extentreports = new ExtentReports();
+		extentreports.attachReporter(sparkreporter);
+		// on the report display more information about OS, browser, java etc
+		extentreports.setSystemInfo("OS", System.getProperty("os.name"));
+		extentreports.setSystemInfo("JAVA", System.getProperty("java.version"));
+		
+	}
+
+	@AfterSuite
+	public void generateReports() throws IOException
+	{
+		extentreports.flush();
+		Desktop.getDesktop().browse(new File("reportpom.html").toURI());
+	}
+	
+	
+	@AfterMethod
+	public void generateTestStatus(Method m,ITestResult result)
+	{
+		if(result.getStatus() == ITestResult.FAILURE )
+		{
+			System.out.println("Capture Screenshot");
+			extentTest.fail(result.getThrowable());
+		}
+		else if (result.getStatus() == ITestResult.SUCCESS) {
+			extentTest.pass(m.getName() + " is passed");
+		}
+	}
+
+	}
+
+
+---------------------------------------------------------------------------------------
+Register page
+------------------------------------------------------------------------------------------
+package com.ninja.qa.Pages;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class RegisterPage {
+	@FindBy(xpath="//input[@id='input-firstname']")
+	WebElement firstname;
+	@FindBy(xpath="//input[@id='input-lastname']")
+	WebElement lastname;
+	@FindBy(xpath="//input[@id='input-email']")
+	WebElement emailid;
+	@FindBy(xpath="//input[@name='telephone']")
+	WebElement phone;
+	@FindBy(xpath="//input[@id='input-password']")
+	WebElement passwd;
+	@FindBy(xpath="//input[@id='input-confirm']")
+	WebElement confirmpasswd;
+	@FindBy(xpath="(//input[@name='newsletter'])[1]")
+	WebElement subscriberadiobtn;
+	@FindBy(xpath="//input[@name='agree']")
+	WebElement policycheckbox;
+	@FindBy(xpath="//input[@type='submit']")
+	WebElement continuebutton;
+	
+	public RegisterPage(WebDriver driver) {
+		
+		PageFactory.initElements(driver, this);
+		
+	}
+	
+	public void regirsteruser(String name,String lname,String email,String ph,String password,String cpasswd) throws InterruptedException {
+		
+		firstname.clear();
+		firstname.sendKeys(name);
+		lastname.clear();
+		lastname.sendKeys(lname);
+		emailid.clear();
+		emailid.sendKeys(email);
+		phone.clear();
+		phone.sendKeys(ph);
+		passwd.clear();
+		passwd.sendKeys(password);
+		confirmpasswd.clear();
+		confirmpasswd.sendKeys(cpasswd);
+		subscriberadiobtn.click();
+		Thread.sleep(1000);
+		policycheckbox.click();
+		Thread.sleep(1000);
+		continuebutton.click();
+		
+		
+	}
+	}
+----------------------------------------------------------------------------------------------------------------------
+Testregisterpage
+-----------------------------------------------------------------------------------------------------------------------
+package com.ninja.qa.TestPages;
+import java.io.IOException;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+import com.ninja.qa.Base.TestBase;
+import com.ninja.qa.Pages.HomePage;
+import com.ninja.qa.Pages.RegisterPage;
+import com.ninja.qa.utilities.Xls_DataProvider;
+
+public class RegisterPageTest extends TestBase {
+	
+HomePage hp;
+RegisterPage rp;
+	@BeforeMethod
+	public void OpenApp()
+	{
+		openBrowser();
+		hp = new HomePage(driver);
+		rp = new RegisterPage(driver);
+	}
+	
+	
+	@AfterMethod
+	public void CloseApp()
+	{
+		driver.quit();
+	}
+	
+	
+	@Test(priority='1', dataProvider="testdata")
+	public void testregisterUser(String name,String lname,String email,String ph,String password,String cpasswd) throws InterruptedException
+	{
+		hp.clickonMyAccount();
+		hp.clickonRegister();
+		rp.regirsteruser(name,lname,email,ph,password,cpasswd);
+	}
+	
+	@DataProvider(name="testdata")
+	public Object[][] datasupplier() throws EncryptedDocumentException, IOException
+	{
+		
+		Object[] [] input = Xls_DataProvider.getTestData("Sheet1");
+		return input;
+		
+	}
+	
+	
+	
+	
+	
+
+}
+------------------------------------------------------------------------------------------------------
+xls_dataprovider
+-----------------------------------------------------------------------------------------------------
+package com.ninja.qa.utilities;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+public class Xls_DataProvider {
+	static Workbook book;
+	static Sheet sheet;
+   
+	public static String testdata_sheet_path = "C:\\Users\\Swetha Andrews\\Desktop\\mytestdata\\Registerninja.xlsx";
+	
+	public static Object[][] getTestData(String sheetName ) throws EncryptedDocumentException, IOException
+	{
+		
+		FileInputStream file = null;
+		file =	new FileInputStream(testdata_sheet_path);
+		
+		book = WorkbookFactory.create(file);
+		
+		sheet = book.getSheet(sheetName);
+		
+		//create an array which will store number of rows and cols
+		// dataType[][] arrayname = new datatype[lengthrow][lengthcol]
+		
+		Object[][] inputdata = new Object[sheet.getLastRowNum()][sheet.getRow(0).getLastCellNum()];
+		
+		for(int i=0;i<sheet.getLastRowNum();i++)
+		{
+			for(int j=0;j<sheet.getRow(0).getLastCellNum();j++)
+			{
+				inputdata[i][j] = sheet.getRow(i+1).getCell(j).toString();
+			}
+		}
+		
+		return inputdata;
+		
+	}
+
+}
+---------------------------------------------------------------------------------------------------------------------
+Testngrunner.xml
+------------------------------------------------------------------------------------------------------------
+<suite name="test1" verbose="1">
+
+  <listeners>
+    <listener class-name="com.ninja.qa.TestPages.ItestListenerClass"></listener>
+  </listeners>
+<test name="POMframework">
+<classes>
+<class name="com.ninja.qa.TestPages.RegisterPageTest"></class>
+<class name="com.ninja.qa.TestPages.ProductPageTest"></class>
+</classes>
+</test>
+</suite>
